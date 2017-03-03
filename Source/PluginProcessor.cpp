@@ -123,26 +123,26 @@ bool SimpleGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 
 void SimpleGainAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
-    const int totalNumInputChannels  = getTotalNumInputChannels();
-    const int totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    const int numSamples = buffer.getNumSamples();
+    
+    // channelDataL and channelDataR are pointers to arrays of length numSamples which
+    // contain the audio for one channel.  You repeat this for each channel
+    float *channelDataL = buffer.getWritePointer(0);
+    float *channelDataR = buffer.getWritePointer(1);
+    
+    // Loop runs from 0 to number of samples in the block
+    for (int i = 0; i < numSamples; ++i)
     {
-        float* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        // Reduce the amplitude of each sample in the block for the
+        // left and right channels
+        channelDataL[i] = channelDataL[i] * 0.5;
+        channelDataR[i] = channelDataR[i] * 0.25;
+        
+        // Another way of achieveing the same gain change per channel
+        //buffer.applyGain(0, 0, numSamples, 0.5);
+        //buffer.applyGain(0, 0, numSamples, 0.25);
     }
+
 }
 
 //==============================================================================
