@@ -11,7 +11,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-
 //==============================================================================
 SimpleGainAudioProcessor::SimpleGainAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -55,6 +54,15 @@ bool SimpleGainAudioProcessor::producesMidi() const
    #endif
 }
 
+bool SimpleGainAudioProcessor::isMidiEffect() const
+{
+   #if JucePlugin_IsMidiEffect
+    return true;
+   #else
+    return false;
+   #endif
+}
+
 double SimpleGainAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
@@ -77,7 +85,7 @@ void SimpleGainAudioProcessor::setCurrentProgram (int index)
 
 const String SimpleGainAudioProcessor::getProgramName (int index)
 {
-    return String();
+    return {};
 }
 
 void SimpleGainAudioProcessor::changeProgramName (int index, const String& newName)
@@ -121,28 +129,41 @@ bool SimpleGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 }
 #endif
 
-void SimpleGainAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
+void SimpleGainAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-    const int numSamples = buffer.getNumSamples();
-    
-    // channelDataL and channelDataR are pointers to arrays of length numSamples which
-    // contain the audio for one channel.  You repeat this for each channel
-    float *channelDataL = buffer.getWritePointer(0);
-    float *channelDataR = buffer.getWritePointer(1);
-    
-    // Loop runs from 0 to number of samples in the block
-    for (int i = 0; i < numSamples; ++i)
-    {
-        // Reduce the amplitude of each sample in the block for the
-        // left and right channels
-        channelDataL[i] = channelDataL[i] * 0.5;
-        channelDataR[i] = channelDataR[i] * 0.25;
-        
-        // Another way of achieveing the same gain change per channel
-        //buffer.applyGain(0, 0, numSamples, 0.5);
-        //buffer.applyGain(0, 0, numSamples, 0.25);
-    }
+    ScopedNoDenormals noDenormals;
+    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    // In case we have more outputs than inputs, this code clears any output
+    // channels that didn't contain input data, (because these aren't
+    // guaranteed to be empty - they may contain garbage).
+    // This is here to avoid people getting screaming feedback
+    // when they first compile a plugin, but obviously you don't need to keep
+    // this code if your algorithm always overwrites all the output channels.
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear (i, 0, buffer.getNumSamples());
+
+    // This is the place where you'd normally do the guts of your plugin's
+    // audio processing...
+    // Make sure to reset the state if your inner loop is processing
+    // the samples and the outer loop is handling the channels.
+    // Alternatively, you can process the samples with the channels
+    // interleaved by keeping the same state.
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    {
+        auto* channelData = buffer.getWritePointer (channel);
+
+		// Loop runs from 0 to number of samples in the block
+		for (int i = 0; i < buffer.getNumSamples(); ++i)
+		{
+			// Reduce the amplitude of each sample in the block for the left and right channels
+			channelData[i] = channelData[i] * 0.5;
+		}
+
+		// Another way of doing the same gain change per channel
+		//buffer.applyGain(channel, 0, numSamples, 0.5);
+    }
 }
 
 //==============================================================================
