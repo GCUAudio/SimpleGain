@@ -1,9 +1,7 @@
 /*
   ==============================================================================
 
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin processor.
+    This file contains the basic framework code for a JUCE plugin processor.
 
   ==============================================================================
 */
@@ -17,9 +15,9 @@ SimpleGainAudioProcessor::SimpleGainAudioProcessor()
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  AudioChannelSet::stereo(), true)
+                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
-                       .withOutput ("Output", AudioChannelSet::stereo(), true)
+                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        )
 #endif
@@ -31,7 +29,7 @@ SimpleGainAudioProcessor::~SimpleGainAudioProcessor()
 }
 
 //==============================================================================
-const String SimpleGainAudioProcessor::getName() const
+const juce::String SimpleGainAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
@@ -83,12 +81,12 @@ void SimpleGainAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const String SimpleGainAudioProcessor::getProgramName (int index)
+const juce::String SimpleGainAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void SimpleGainAudioProcessor::changeProgramName (int index, const String& newName)
+void SimpleGainAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
 
@@ -109,13 +107,13 @@ void SimpleGainAudioProcessor::releaseResources()
 bool SimpleGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
-    ignoreUnused (layouts);
+    juce::ignoreUnused (layouts);
     return true;
   #else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
-    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
+    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
+     && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
     // This checks if the input layout matches the output layout
@@ -129,9 +127,9 @@ bool SimpleGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 }
 #endif
 
-void SimpleGainAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    ScopedNoDenormals noDenormals;
+    juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -161,8 +159,6 @@ void SimpleGainAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 			channelData[i] = channelData[i] * 0.5;
 		}
 
-		// Another way of doing the same gain change per channel
-		//buffer.applyGain(channel, 0, numSamples, 0.5);
     }
 }
 
@@ -172,13 +168,13 @@ bool SimpleGainAudioProcessor::hasEditor() const
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* SimpleGainAudioProcessor::createEditor()
+juce::AudioProcessorEditor* SimpleGainAudioProcessor::createEditor()
 {
     return new SimpleGainAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void SimpleGainAudioProcessor::getStateInformation (MemoryBlock& destData)
+void SimpleGainAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
@@ -193,7 +189,7 @@ void SimpleGainAudioProcessor::setStateInformation (const void* data, int sizeIn
 
 //==============================================================================
 // This creates new instances of the plugin..
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SimpleGainAudioProcessor();
 }
