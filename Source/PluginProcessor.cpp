@@ -112,6 +112,8 @@ bool SimpleGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
   #else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
+    // Some plugin hosts, such as certain GarageBand versions, will only
+    // load plugins that support stereo bus layouts.
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
      && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
@@ -143,7 +145,7 @@ void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         buffer.clear (i, 0, buffer.getNumSamples());
 
     // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
+    // audio processing...  
     // Make sure to reset the state if your inner loop is processing
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
@@ -152,12 +154,12 @@ void SimpleGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     {
         auto* channelData = buffer.getWritePointer (channel);
 
-		// Loop runs from 0 to number of samples in the block
-		for (int i = 0; i < buffer.getNumSamples(); ++i)
-		{
-			// Reduce the amplitude of each sample in the block for the left and right channels
-			channelData[i] = channelData[i] * 0.5;
-		}
+        // Loop runs from 0 to number of samples in the block
+        for (int i = 0; i < buffer.getNumSamples(); ++i)
+        {
+            // Reduce the amplitude of each sample in the block for the left and right channels
+            channelData[i] = channelData[i] * 0.5;
+        }
 
     }
 }
