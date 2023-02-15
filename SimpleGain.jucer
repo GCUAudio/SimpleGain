@@ -15,26 +15,26 @@
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
-    <VS2019 targetFolder="Builds/VisualStudio2019">
+    <VS2022 targetFolder="Builds/VisualStudio2022">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="SimpleGain"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="SimpleGain"/>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_utils" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_core" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="D:\GCU APE TEACHING RESOURCES\AAP\22-23\JUCE\modules"/>
       </MODULEPATHS>
-    </VS2019>
+    </VS2022>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
